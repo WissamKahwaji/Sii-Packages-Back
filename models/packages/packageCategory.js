@@ -27,6 +27,7 @@ const categoryPackageSchema = new Schema(
           {
             img: String,
             link: String,
+            secondLink: String,
           },
         ],
       },
