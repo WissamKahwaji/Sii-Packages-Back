@@ -26,6 +26,10 @@ const packageSchema = new Schema(
       ref: "Category",
       required: true,
     },
+    isPopular: Boolean,
+    isMonthly: Boolean,
+    subTitle_en: String,
+    subTitle_ar: String,
   },
   {
     timestamps: true,
