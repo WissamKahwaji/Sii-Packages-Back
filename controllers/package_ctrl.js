@@ -4,7 +4,10 @@ import { Package } from "../models/packages/package.js";
 
 export const getCategories = async (req, res, next) => {
   try {
-    const categories = await Category.find().populate("packages");
+    const categories = await Category.find().populate("packages").populate({
+      path: "subcategories",
+      populate: "packages",
+    });
     res.status(200).json(categories);
   } catch (error) {
     if (!error.statusCode) {
@@ -17,7 +20,12 @@ export const getCategories = async (req, res, next) => {
 export const getCategoryById = async (req, res, next) => {
   try {
     const categoryId = req.params.id;
-    const category = await Category.findById(categoryId).populate("packages");
+    const category = await Category.findById(categoryId)
+      .populate("packages")
+      .populate({
+        path: "subcategories",
+        populate: "packages",
+      });
     if (!category) {
       return res.status(404).json({ message: "Category not found" });
     }

@@ -1,6 +1,24 @@
 import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
+
+const subCategorySchema = new Schema({
+  name_en: {
+    type: String,
+    required: true,
+  },
+  name_ar: {
+    type: String,
+    required: true,
+  },
+  packages: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Package",
+    },
+  ],
+});
+
 const categoryPackageSchema = new Schema(
   {
     name_en: {
@@ -20,6 +38,8 @@ const categoryPackageSchema = new Schema(
         ref: "Package",
       },
     ],
+    subcategories: [subCategorySchema],
+    hasSubcategories: Boolean,
     samples: [
       {
         name: String,
