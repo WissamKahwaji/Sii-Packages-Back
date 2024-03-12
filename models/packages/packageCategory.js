@@ -17,6 +17,18 @@ const subCategorySchema = new Schema({
       ref: "Package",
     },
   ],
+  samples: [
+    {
+      name: String,
+      samples: [
+        {
+          img: String,
+          link: String,
+          secondLink: String,
+        },
+      ],
+    },
+  ],
 });
 
 const categoryPackageSchema = new Schema(

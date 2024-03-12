@@ -25,9 +25,7 @@ router.post(
       .not()
       .isEmpty()
       .withMessage("Arabic title is required"),
-    check("price")
-      .isFloat({ gt: 0 })
-      .withMessage("Price must be greater than 0"),
+
     check("categoryId").isMongoId().withMessage("Invalid category ID"),
   ],
   createPackage
