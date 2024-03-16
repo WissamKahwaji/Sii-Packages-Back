@@ -20,6 +20,7 @@ const subCategorySchema = new Schema({
   samples: [
     {
       name: String,
+      name_ar: String,
       samples: [
         {
           img: String,
@@ -27,6 +28,7 @@ const subCategorySchema = new Schema({
           secondLink: String,
         },
       ],
+      videos: [{ link: String }],
     },
   ],
 });
@@ -52,6 +54,8 @@ const categoryPackageSchema = new Schema(
     ],
     subcategories: [subCategorySchema],
     hasSubcategories: Boolean,
+    bio_en: String,
+    bio_ar: String,
     samples: [
       {
         name: String,

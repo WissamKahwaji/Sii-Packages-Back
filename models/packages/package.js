@@ -30,6 +30,8 @@ const packageSchema = new Schema(
     isMonthly: Boolean,
     subTitle_en: String,
     subTitle_ar: String,
+    priceTitle_en: String,
+    priceTitle_ar: String,
   },
   {
     timestamps: true,

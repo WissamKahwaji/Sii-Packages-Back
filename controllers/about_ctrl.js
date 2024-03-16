@@ -13,6 +13,36 @@ export const getAboutData = async (req, res, next) => {
   }
 };
 
+export const editAboutData = async (req, res, next) => {
+  try {
+    const {
+      ourVision,
+      ourMission,
+      ourValues,
+      ourVision_ar,
+      ourMission_ar,
+      ourValues_ar,
+    } = req.body;
+    const data = await AboutModel.findOne();
+    if (!data) {
+      return res.status(404).json({ message: "data not found" });
+    }
+    if (ourVision) data.ourVision = ourVision;
+    if (ourMission) data.ourMission = ourMission;
+    if (ourValues) data.ourValues = ourValues;
+    if (ourVision_ar) data.ourVision_ar = ourVision_ar;
+    if (ourVision_ar) data.ourVision_ar = ourVision_ar;
+    if (ourVision_ar) data.ourVision_ar = ourVision_ar;
+    const updatedData = await data.save();
+    return res.status(200).json(updatedData);
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+};
+
 export const sendEmail = async (req, res, next) => {
   try {
     const { email, name, companyName, mobile, message, subject } = req.body;
