@@ -54,6 +54,7 @@ app.use("/images", express.static(path.join(__dirname, "images")));
 app.use(
   multer({ storage: fileStorage, fileFilter: fileFilter }).fields([
     { name: "img", maxCount: 10 },
+    { name: "imgs", maxCount: 30 },
     { name: "logoImg", maxCount: 10 },
     { name: "video", maxCount: 1 },
   ])

@@ -332,6 +332,35 @@ export const uploadVideo = async (req, res, next) => {
     next(error);
   }
 };
+export const uploadImages = async (req, res, next) => {
+  try {
+    const inputImages = req.files["imgs"];
+    const imageUrls = [];
+    if (!inputImages || !Array.isArray(inputImages)) {
+      return res
+        .status(404)
+        .json({ message: "Attached files are missing or invalid." });
+    }
+    for (const image of inputImages) {
+      if (!image) {
+        return res
+          .status(404)
+          .json({ message: "Attached file is not an image." });
+      }
+
+      const imageUrl =
+        `${process.env.BASE_URL}` + image.path.replace(/\\/g, "/");
+      imageUrls.push(imageUrl);
+    }
+
+    return res.status(200).json(imageUrls);
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+};
 
 export const addSampleToCategory = async (req, res, next) => {
   try {

@@ -12,6 +12,7 @@ import {
   getCategories,
   getCategoryById,
   getPackageById,
+  uploadImages,
   uploadVideo,
 } from "../controllers/package_ctrl.js";
 import auth from "../middlewares/auth.js";
@@ -70,6 +71,7 @@ router.post(
 );
 
 router.post("/upload-video", uploadVideo);
+router.post("/upload-imgs", uploadImages);
 
 router.post("/:categoryId/add-sample", auth, addSampleToCategory);
 
