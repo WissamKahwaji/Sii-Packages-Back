@@ -5,11 +5,11 @@ import {
   requestPackage,
   sendEmail,
 } from "../controllers/about_ctrl.js";
-
+import auth from "../middlewares/auth.js";
 const router = express.Router();
 
 router.get("/", getAboutData);
-router.put("/edit", editAboutData);
+router.put("/edit", auth, editAboutData);
 router.post("/send-email", sendEmail);
 router.post("/request-package", requestPackage);
 

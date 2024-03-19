@@ -1,6 +1,7 @@
 import express from "express";
 import { check } from "express-validator";
 import {
+  addSampleToCategory,
   createPackage,
   createPackageCategoty,
   createPackageToSubCategory,
@@ -13,18 +14,20 @@ import {
   getPackageById,
   uploadVideo,
 } from "../controllers/package_ctrl.js";
+import auth from "../middlewares/auth.js";
 
 const router = express.Router();
 router.get("/byId/:id", getPackageById);
-router.put("/edit/:id", editPackage);
-router.delete("/delete/:id", deletePackage);
+router.put("/edit/:id", auth, editPackage);
+router.delete("/delete/:id", auth, deletePackage);
 
 router.get("/categories", getCategories);
 router.get("/category/:id", getCategoryById);
-router.put("/category/:id", editCategoryInfo);
-router.delete("/category/:id", deleteCategory);
+router.put("/category/:id", auth, editCategoryInfo);
+router.delete("/category/:id", auth, deleteCategory);
 router.post(
   "/add/:categoryId",
+  auth,
   [
     check("title_en")
       .trim()
@@ -44,11 +47,13 @@ router.post(
 
 router.post(
   "/add-to-subcategory/:categoryId/:subId",
+  auth,
   createPackageToSubCategory
 );
 
 router.post(
   "/category",
+  auth,
   [
     check("name_en")
       .trim()
@@ -65,5 +70,7 @@ router.post(
 );
 
 router.post("/upload-video", uploadVideo);
+
+router.post("/:categoryId/add-sample", auth, addSampleToCategory);
 
 export default router;

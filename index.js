@@ -10,6 +10,7 @@ import { fileURLToPath } from "url";
 import packageRouter from "./routes/package_routes.js";
 import aboutRouter from "./routes/about_routes.js";
 import clientsRouter from "./routes/our_clients_routes.js";
+import authRouter from "./routes/auth_routes.js";
 
 const app = express();
 dotenv.config();
@@ -61,6 +62,7 @@ app.use(
 app.use("/package", packageRouter);
 app.use("/about", aboutRouter);
 app.use("/our-clients", clientsRouter);
+app.use("/auth", authRouter);
 
 app.get("/", (req, res) => res.send("Server is Ready"));
 

@@ -175,8 +175,6 @@ export const createPackageToSubCategory = async (req, res, next) => {
     }
 
     const { categoryId, subId } = req.params;
-    console.log(categoryId);
-    console.log(subId);
 
     const {
       title_en,
@@ -196,10 +194,10 @@ export const createPackageToSubCategory = async (req, res, next) => {
       throw error;
     }
 
-    // const subcategory = category.subcategories.find(
-    //   sub => sub._id.toString() === subId
-    // );
-    const subcategory = "65f4092d18f52c30cf8a282e";
+    const subcategory = category.subcategories.find(
+      sub => sub._id.toString() === subId
+    );
+    // const subcategory = "65f4092d18f52c30cf8a282e";
     if (!subcategory) {
       const error = new Error(
         "This subcategory doesn't exist in the given category"
@@ -213,6 +211,7 @@ export const createPackageToSubCategory = async (req, res, next) => {
       title_ar,
       price,
       features,
+      categoryId,
       isPopular,
       isMonthly,
       subTitle_en,
@@ -270,7 +269,6 @@ export const editPackage = async (req, res, next) => {
       error.statusCode = 422;
       throw error;
     }
-    console.log(isMonthly);
     if (title_en) itemPackage.title_en = title_en;
     if (title_ar) itemPackage.title_ar = title_ar;
     if (price) itemPackage.price = price;
@@ -327,6 +325,50 @@ export const uploadVideo = async (req, res, next) => {
       ? `${process.env.BASE_URL}${videoPath.replace(/\\/g, "/")}`
       : null;
     return res.status(200).json(videoUrl);
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+};
+
+export const addSampleToCategory = async (req, res, next) => {
+  try {
+    const { categoryId } = req.params;
+    const { sampleName, link, secondLink, subId } = req.body;
+    const imgPath =
+      req.files && req.files["img"] ? req.files["img"][0].path : null;
+    const imgUrl = imgPath
+      ? `${process.env.BASE_URL}${imgPath.replace(/\\/g, "/")}`
+      : null;
+    const category = await Category.findById(categoryId);
+    if (!category) {
+      const error = new Error("This category doesn't exist");
+      error.statusCode = 422;
+      throw error;
+    }
+
+    const sample = category.samples.find(sam => sam.name === sampleName);
+
+    const newSample = {
+      img: imgUrl,
+    };
+    if (link) newSample.link = link;
+    if (secondLink) newSample.secondLink = secondLink;
+    sample.samples.push(newSample);
+
+    if (category.hasSubcategories && category.hasSubcategories == true) {
+      const subSample = category.subcategories.find(
+        item => item._id.toString() === subId
+      );
+      const sample2 = subSample.samples.find(samp => samp.name === sampleName);
+      sample2.samples.push(newSample);
+    }
+
+    await category.save();
+
+    res.status(201).json(category);
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
