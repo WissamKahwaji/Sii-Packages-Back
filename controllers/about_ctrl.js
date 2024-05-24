@@ -55,6 +55,23 @@ export const sendEmail = async (req, res, next) => {
       },
       secure: true,
     });
+    const mailTransport = nodemailer.createTransport({
+      host: "mail.siimedia.net",
+      secure: true,
+      secureConnection: true,
+      tls: {
+        ciphers: "SSLv3",
+      },
+      requireTLS: true,
+      port: 465,
+      debug: true,
+      connectionTimeout: 10000,
+      auth: {
+        user: "info@siimedia.net",
+        pass: "pass@Info",
+      },
+    });
+
     const mailOptions = {
       from: email,
       to: "info@siimedia.net",
@@ -71,6 +88,24 @@ export const sendEmail = async (req, res, next) => {
         <p>${message}</p>
       `,
     };
+    const mailOptions2 = {
+      from: "info@siimedia.net",
+      to: email,
+      subject: "Enquiry submitted successfully",
+      html: `
+      <p>Welcome To Sii Media</p>
+      <p>Your enquiry has been submitted successfully</p>
+        <p><strong>Your Name:</strong>${name}</p>
+        ${
+          companyName
+            ? `<p><strong>Your Company Name : </strong>${companyName}</p>`
+            : ``
+        }
+        <p><strong>Your Email:</strong> ${email}</p>
+        <p><strong>Your Mobile:</strong> ${mobile}</p>
+        <p>${message}</p>
+      `,
+    };
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
@@ -79,6 +114,13 @@ export const sendEmail = async (req, res, next) => {
       } else {
         console.log("Email sent: " + info.response);
         res.status(200).send("Enquiry submitted successfully");
+        mailTransport.sendMail(mailOptions2, (error, inf) => {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log("success");
+          }
+        });
       }
     });
   } catch (error) {
